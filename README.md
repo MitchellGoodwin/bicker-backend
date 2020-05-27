@@ -2,7 +2,7 @@
 
 This is the repository for the backend for Bicker, a twitter clone that's upfront on being about negativity. The frontend repo can be found TBD
 
-# MVC
+# MVP
 
 ## Models
 

@@ -40,7 +40,8 @@ router.delete('/users/logout', auth, async (req, res) => {
 router.get('/users/:id/', async (req, res) => {
     try {
         const user = await User.findById(req.params.id)
-        res.send(user)
+        await user.populate('posts').execPopulate()
+        res.send({user, posts: user.posts})
     } catch(e) {
         res.status(404).send()
     }

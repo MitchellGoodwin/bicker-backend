@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const Post = require('./post')
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -31,7 +32,8 @@ const userSchema = new mongoose.Schema({
 userSchema.virtual('posts', {
     ref: 'Post',
     localField: '_id',
-    foreignField: 'owner'
+    foreignField: 'owner',
+    options: { sort: { createdAt: -1 } }
 })
 
 userSchema.pre('save', async function (next) {
@@ -79,6 +81,12 @@ userSchema.methods.toJSON = function () {
 
     return userObject
 }
+
+userSchema.pre('remove', async function (next) {
+    const user = this
+    await Post.deleteMany({ owner: user._id})
+    next()
+})
 
 const User = mongoose.model('User', userSchema)
 

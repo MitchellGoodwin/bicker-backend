@@ -28,6 +28,12 @@ const userSchema = new mongoose.Schema({
     }]
 })
 
+userSchema.virtual('posts', {
+    ref: 'Post',
+    localField: '_id',
+    foreignField: 'owner'
+})
+
 userSchema.pre('save', async function (next) {
     const user = this
 

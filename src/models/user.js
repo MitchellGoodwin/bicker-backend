@@ -38,6 +38,22 @@ userSchema.pre('save', async function (next) {
     next()
 })
 
+userSchema.statics.findByCredentials = async (username, password) => {
+    const user = await User.findOne({ username })
+
+    if (!user) {
+        throw new Error('Unable to login')
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password)
+
+    if (!isMatch) {
+        throw new Error('Unable to login')
+    }
+
+    return user
+}
+
 userSchema.methods.generateAuthToken = async function () {
     const user = this
     const token = jwt.sign({ _id: user._id.toString() }, process.env.SECRET)

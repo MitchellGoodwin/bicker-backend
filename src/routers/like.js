@@ -16,4 +16,21 @@ router.post('/likes', auth, async (req, res) => {
     }
 })
 
+router.delete('/likes/:id', auth, async (req, res) => {
+    const _id = req.params.id
+
+    try {
+        const like = await Like.findOne({ _id, user: req.user._id})
+        
+        if (!like) {
+            return res.status(400).send()
+        }
+
+        await like.remove()
+        res.send(like)
+    } catch (e) {
+        res.status(400).send()
+    }
+})
+
 module.exports = router

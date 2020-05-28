@@ -12,8 +12,16 @@ const postSchema = new mongoose.Schema({
         ref: 'User'
     }
 }, {
-    timestamps: true
+    timestamps: true,
+    toJSON: { virtuals: true }
 })
+
+postSchema.virtual('likes', {
+    ref: 'Like',
+    localField: '_id',
+    foreignField: 'post'
+})
+
 
 const Post = mongoose.model('Post', postSchema)
 

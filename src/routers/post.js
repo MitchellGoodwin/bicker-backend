@@ -66,7 +66,7 @@ router.delete('/posts/:id', auth, async(req, res) => {
 })
 
 router.get('/posts', async (req, res) => {
-    const posts = await Post.find().sort({createdAt: -1}).populate('owner')
+    const posts = await Post.find().sort({createdAt: -1}).populate('owner').populate('likes')
     res.send(posts)
 })
 

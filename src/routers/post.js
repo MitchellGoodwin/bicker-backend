@@ -48,6 +48,23 @@ router.patch('/posts/:id', auth, async (req, res) => {
     }
 })
 
+router.delete('/posts/:id', auth, async(req, res) => {
+    const _id = req.params.id
+
+    try {
+        const post = await Post.findOne({ _id, owner: req.user._id})
+        
+        if (!post) {
+            return res.status(400).send()
+        }
+
+        await post.remove()
+        res.send(post)
+    } catch (e) {
+        res.status(400).send()
+    }
+})
+
 router.get('/posts', async (req, res) => {
     const posts = await Post.find().sort({createdAt: -1}).populate('owner')
     res.send(posts)
